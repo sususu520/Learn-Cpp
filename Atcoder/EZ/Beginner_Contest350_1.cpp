@@ -8,3 +8,17 @@
 // 制約
 // ∣S∣=3
 // S には R M S が 1 文字ずつ含まれる
+
+#include<iostream>
+#include<string>
+using  namespace std;
+
+int main(){
+    string S, result;
+    int posion1, position2;
+    cin >> S;
+    if(S.find("R") < S.find("M")) result = "Yes";
+    else result = "No";
+    cout << result << endl;
+    return 0;
+}
