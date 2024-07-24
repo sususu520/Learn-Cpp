@@ -60,36 +60,51 @@ using namespace std;
 
 // 双指针方法，O（NlogN）
 
-int main(){
-    int N, T;
+int main() {
+    long long N, T;
     string S;
-    int X[200001];
+
+    // 输入N、T和S
     cin >> N >> T >> S;
-    for (int i = 0; i < N; i++) cin >> X[i];
-
-    vector<int> rightAnts;
-    vector<int> leftAnts;
-
-    for (int i = 0; i < N; i++)
-    {
-        if (S[i] == '1') rightAnts.push_back(X[i]);
-        else leftAnts.push_back(X[i]);
+    
+    // 确保在知道N的值后初始化X
+    vector<long long> X(N);
+    
+    // 输入X数组
+    for (long long i = 0; i < N; i++) {
+        cin >> X[i];
     }
 
+    vector<long long> rightAnts;
+    vector<long long> leftAnts;
+
+    // 将蚂蚁分为向右走和向左走的两个数组
+    for (long long i = 0; i < N; i++) {
+        if (S[i] == '0') {
+            rightAnts.push_back(X[i]);
+        } else {
+            leftAnts.push_back(X[i]);
+        }
+    }
+
+    // 对两个数组进行排序
     sort(rightAnts.begin(), rightAnts.end());
     sort(leftAnts.begin(), leftAnts.end());
 
-    int i = 0, j = 0;
-    int NumofPass = 0;
-    while (i < rightAnts.size() && j < leftAnts.size()) {
-        if (rightAnts[i] < leftAnts[j] && rightAnts[i] + 2 * T >= leftAnts[j]) {
-            NumofPass += (rightAnts.size() - i);  // 所有右边的蚂蚁都能与这个左边的蚂蚁相遇
-            j++;
-        } else {
-            i++;
-        }
+    long long NumofPass = 0;
+
+    // 计算通过的蚂蚁对数
+    for (long long i = 0; i < leftAnts.size(); i++) {
+        // 寻找第一个大于等于leftAnts[i]的位置
+        auto p1 = lower_bound(rightAnts.begin(), rightAnts.end(), leftAnts[i]);
+        // 寻找第一个大于leftAnts[i] + 2 * T的位置
+        auto p2 = upper_bound(rightAnts.begin(), rightAnts.end(), leftAnts[i] + 2 * T);
+        // 计算区间内的蚂蚁对数
+        NumofPass += p2 - p1;
     }
-    
+
+    // 输出结果
     cout << NumofPass << endl;
-    
+
+    return 0;
 }
